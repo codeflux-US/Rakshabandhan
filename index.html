@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Raksha Bandhan</title>
+
+<!-- ============================================================
+     FONTS
+     - Marcellus: an inscribed, temple-plaque serif used ONLY for
+       the big ceremonial title (restraint = impact).
+     - Cormorant Garamond (italic): the "editorial" voice used for
+       the poem, so the final message reads like handwriting on a card.
+     - Poppins: quiet, neutral UI voice for buttons/labels/body.
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          maroon: {
+            950: '#3D0A12',
+            900: '#4A0A14',
+            800: '#63101F',
+            700: '#7A1428',
+            600: '#8F1B31',
+          },
+          gold: {
+            DEFAULT: '#D4AF37',
+            bright: '#FFD700',
+            soft: '#E8C97A',
+          },
+          cream: '#FFF8EC',
+          saffron: '#FF7A30',
+          rose: '#E9B9BC',
+        },
+        fontFamily: {
+          display: ['Marcellus', 'serif'],
+          poem: ['"Cormorant Garamond"', 'serif'],
+          body: ['Poppins', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+
+<!-- External stylesheet -->
+<link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 relative overflow-x-hidden">
+
+  <!-- Floating gold dust + marigold petals, populated by JS -->
+  <div id="particle-field" aria-hidden="true"></div>
+
+  <!-- faint mandala watermark -->
+  <svg aria-hidden="true" class="fixed inset-0 w-full h-full opacity-[0.06] pointer-events-none" viewBox="0 0 400 400">
+    <g fill="none" stroke="#FFD700" stroke-width="1">
+      <circle cx="200" cy="200" r="180"/>
+      <circle cx="200" cy="200" r="140"/>
+      <circle cx="200" cy="200" r="100"/>
+      <circle cx="200" cy="200" r="60"/>
+      <g id="petals"></g>
+    </g>
+  </svg>
+
+  <!-- ============================================================
+       MAIN WIZARD CARD
+       ============================================================ -->
+  <main class="relative z-10 w-full max-w-xl bg-cream/95 backdrop-blur rounded-3xl shadow-2xl ring-1 ring-gold/30 overflow-hidden">
+
+    <!-- Thread progress header (signature element) -->
+    <div class="px-6 sm:px-10 pt-6 pb-4">
+      <div class="flex items-center justify-between mb-2">
+        <div class="thread-knot active" data-knot="1"><span class="dot"></span></div>
+        <div class="thread-track flex-1 mx-1"><div class="thread-fill" id="fill-1" style="width:0%"></div></div>
+        <div class="thread-knot" data-knot="2"><span class="dot"></span></div>
+        <div class="thread-track flex-1 mx-1"><div class="thread-fill" id="fill-2" style="width:0%"></div></div>
+        <div class="thread-knot" data-knot="3"><span class="dot"></span></div>
+        <div class="thread-track flex-1 mx-1"><div class="thread-fill" id="fill-3" style="width:0%"></div></div>
+        <div class="thread-knot" data-knot="4"><span class="dot"></span></div>
+      </div>
+      <p class="text-center text-[11px] sm:text-xs tracking-[0.2em] uppercase text-maroon-700/70 font-body" id="step-label">The Envelope</p>
+    </div>
+
+    <div class="px-6 sm:px-10 pb-8 sm:pb-10 min-h-[420px]" id="step-container">
+
+      <!-- ============================ STEP 1: WELCOME ============================ -->
+      <section class="step active" data-step="1">
+        <div class="envelope-scene py-4">
+          <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open your Raksha Bandhan card" onclick="openEnvelope()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEnvelope();}">
+            <div class="envelope-body"></div>
+            <div class="envelope-card">
+              <p class="font-poem italic text-maroon-800 text-sm sm:text-base leading-snug">
+                A little thread,<br/>a lot of love —<br/>open me, <span id="name-in-card">Khushi</span>.
+              </p>
+            </div>
+            <div class="envelope-flap"></div>
+            <div class="envelope-seal">✦</div>
+          </div>
+          <p class="text-center text-maroon-700/70 text-xs sm:text-sm mt-5 font-body animate-pulse" id="envelope-hint">tap the envelope to open it</p>
+        </div>
+
+        <div class="text-center mt-2 hidden" id="welcome-reveal">
+          <h1 id="welcome-title" class="font-display text-3xl sm:text-4xl text-maroon-800 leading-tight">
+            Happy Raksha Bandhan,<br/><span style="color:#B8912A;">Khushi</span>
+          </h1>
+          <p class="text-maroon-700/80 mt-3 font-body text-sm sm:text-base">
+            A little something's on its way for you — let's get it ready.
+          </p>
+          <button class="btn-shimmer mt-7 bg-maroon-800 hover:bg-maroon-700 text-cream font-body font-medium tracking-wide px-8 py-3 rounded-full shadow-lg transition-colors" onclick="goToStep(2)">
+            Next
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================ STEP 2: RAKHI SELECTION ============================ -->
+      <section class="step" data-step="2">
+        <h2 class="font-display text-2xl sm:text-3xl text-maroon-800 text-center mb-1">Choose Your Rakhi</h2>
+        <p class="text-center text-maroon-700/70 text-xs sm:text-sm mb-6 font-body">Pick the one that feels right — only one thread makes it to the wrist.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Classic Thread Rakhi -->
+          <button type="button" class="rakhi-card text-left bg-white rounded-2xl p-5 relative" onclick="selectRakhi(this,'Classic Thread Rakhi')">
+            <div class="check-badge absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center" style="background:#FFD700;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <svg class="thread-icon mx-auto" width="72" height="72" viewBox="0 0 72 72">
+              <circle class="strand" cx="36" cy="30" r="18" stroke-dasharray="4 6"/>
+              <circle class="strand" cx="36" cy="30" r="12"/>
+              <line class="strand" x1="36" y1="48" x2="30" y2="66"/>
+              <line class="strand" x1="36" y1="48" x2="42" y2="66"/>
+              <circle cx="36" cy="30" r="4" fill="#E9B9BC" stroke="none"/>
+            </svg>
+            <h3 class="font-display text-lg text-maroon-800 text-center mt-3">Classic Thread Rakhi</h3>
+            <p class="text-center text-maroon-700/60 text-xs mt-1 font-body">Simple, sweet, timeless</p>
+          </button>
+
+          <!-- Premium Zardosi Rakhi -->
+          <button type="button" class="rakhi-card text-left bg-white rounded-2xl p-5 relative" onclick="selectRakhi(this,'Premium Zardosi Rakhi')">
+            <div class="check-badge absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center" style="background:#FFD700;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <svg class="thread-icon mx-auto" width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="30" r="16" fill="none" stroke="#D4AF37" stroke-width="3"/>
+              <circle cx="36" cy="30" r="8" fill="#FFE07A" stroke="#D4AF37" stroke-width="2"/>
+              <g stroke="#D4AF37" stroke-width="2">
+                <line x1="36" y1="10" x2="36" y2="16"/>
+                <line x1="56" y1="30" x2="50" y2="30"/>
+                <line x1="16" y1="30" x2="22" y2="30"/>
+                <line x1="50.5" y1="15.5" x2="46" y2="20"/>
+                <line x1="21.5" y1="15.5" x2="26" y2="20"/>
+              </g>
+              <line x1="36" y1="46" x2="30" y2="66" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
+              <line x1="36" y1="46" x2="42" y2="66" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <h3 class="font-display text-lg text-maroon-800 text-center mt-3">Premium Zardosi Rakhi</h3>
+            <p class="text-center text-maroon-700/60 text-xs mt-1 font-body">Hand-embroidered, gold-thread luxury</p>
+          </button>
+        </div>
+
+        <div class="flex justify-center mt-8">
+          <button class="btn-shimmer bg-maroon-800 hover:bg-maroon-700 disabled:opacity-40 disabled:cursor-not-allowed text-cream font-body font-medium tracking-wide px-8 py-3 rounded-full shadow-lg transition-colors" id="rakhi-next" disabled onclick="goToStep(3)">
+            Next
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================ STEP 3: GIFT SELECTION ============================ -->
+      <section class="step" data-step="3">
+        <h2 class="font-display text-2xl sm:text-3xl text-maroon-800 text-center mb-1">Pick a Gift</h2>
+        <p class="text-center text-maroon-700/70 text-xs sm:text-sm mb-6 font-body">You can choose anyone.</p>
+
+        <div class="space-y-3">
+          <button type="button" class="gift-card w-full flex items-center gap-4 bg-white rounded-xl p-4" onclick="toggleGift(this,'Cash Shagun')">
+            <div class="gift-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="text-2xl">💰</span>
+            <div class="text-left">
+              <p class="font-display text-maroon-800 text-base">Cash Shagun</p>
+              <p class="text-maroon-700/60 text-xs font-body">₹500, straight to the point</p>
+            </div>
+          </button>
+
+          <button type="button" class="gift-card w-full flex items-center gap-4 bg-white rounded-xl p-4" onclick="toggleGift(this,'Trendy Clothes')">
+            <div class="gift-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="text-2xl">👗</span>
+            <div class="text-left">
+              <p class="font-display text-maroon-800 text-base">Trendy Clothes</p>
+              <p class="text-maroon-700/60 text-xs font-body">A little something to wear out</p>
+            </div>
+          </button>
+
+          <button type="button" class="gift-card w-full flex items-center gap-4 bg-white rounded-xl p-4" onclick="toggleGift(this,'Mithai Box')">
+            <div class="gift-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="text-2xl">🍬</span>
+            <div class="text-left">
+              <p class="font-display text-maroon-800 text-base">Mithai Box</p>
+              <p class="text-maroon-700/60 text-xs font-body">Because the thread deserves something sweet</p>
+            </div>
+          </button>
+
+          <button type="button" class="gift-card w-full flex items-center gap-4 bg-white rounded-xl p-4" onclick="toggleGift(this,'Surprise Gift')">
+            <div class="gift-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="text-2xl">🎁</span>
+            <div class="text-left">
+              <p class="font-display text-maroon-800 text-base">Surprise Gift</p>
+              <p class="text-maroon-700/60 text-xs font-body">You'll just have to wait and see</p>
+            </div>
+          </button>
+        </div>
+
+        <div class="flex justify-center mt-8">
+          <button class="btn-shimmer bg-maroon-800 hover:bg-maroon-700 disabled:opacity-40 disabled:cursor-not-allowed text-cream font-body font-medium tracking-wide px-8 py-3 rounded-full shadow-lg transition-colors" id="gift-next" disabled onclick="goToStep(4)">
+            Next
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================ STEP 4: THANK YOU ============================ -->
+      <section class="step" data-step="4">
+        <div class="text-center py-2">
+          <svg width="120" height="90" viewBox="0 0 120 90" class="mx-auto" aria-hidden="true">
+            <ellipse cx="60" cy="70" rx="52" ry="12" fill="#E4CB94" stroke="#D4AF37" stroke-width="2"/>
+            <ellipse cx="60" cy="66" rx="46" ry="8" fill="#FFF8EC"/>
+            <g class="laddoo">
+              <circle cx="42" cy="52" r="13" fill="#FFB84D" stroke="#D4870D" stroke-width="1.5"/>
+              <circle cx="38" cy="47" r="1.6" fill="#8F1B31"/>
+              <circle cx="46" cy="49" r="1.6" fill="#8F1B31"/>
+              <circle cx="44" cy="56" r="1.6" fill="#8F1B31"/>
+            </g>
+            <g class="laddoo">
+              <circle cx="60" cy="47" r="14" fill="#FFC46B" stroke="#D4870D" stroke-width="1.5"/>
+              <circle cx="55" cy="42" r="1.7" fill="#8F1B31"/>
+              <circle cx="65" cy="44" r="1.7" fill="#8F1B31"/>
+              <circle cx="60" cy="53" r="1.7" fill="#8F1B31"/>
+            </g>
+            <g class="laddoo">
+              <circle cx="78" cy="52" r="13" fill="#FFB84D" stroke="#D4870D" stroke-width="1.5"/>
+              <circle cx="74" cy="47" r="1.6" fill="#8F1B31"/>
+              <circle cx="82" cy="49" r="1.6" fill="#8F1B31"/>
+              <circle cx="80" cy="56" r="1.6" fill="#8F1B31"/>
+            </g>
+            <path class="steam" d="M50 32 Q 46 24 50 16" stroke="#FFF8EC" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path class="steam" d="M60 30 Q 56 22 60 14" stroke="#FFF8EC" stroke-width="2.5" fill="none" stroke-linecap="round" style="animation-delay:0.6s;"/>
+            <path class="steam" d="M70 32 Q 66 24 70 16" stroke="#FFF8EC" stroke-width="2.5" fill="none" stroke-linecap="round" style="animation-delay:1.1s;"/>
+          </svg>
+
+          <h1 class="font-display text-3xl sm:text-4xl text-maroon-800 leading-tight mt-4">
+            All Tied Up, <span style="color:#B8912A;">Khushi</span>
+          </h1>
+
+          <p class="font-poem italic text-maroon-800 text-lg sm:text-xl mt-5 leading-relaxed max-w-sm mx-auto" id="summary-poem">
+            One thread, one wish, one promise —<br/>however far apart we stand.
+          </p>
+
+          <div class="mt-6 bg-white/70 rounded-2xl px-5 py-4 max-w-sm mx-auto text-left" id="summary-box">
+            <p class="text-[11px] tracking-[0.15em] uppercase text-maroon-700/60 font-body mb-2">On its way to you</p>
+            <p class="font-body text-sm text-maroon-800" id="summary-rakhi">Rakhi: —</p>
+            <p class="font-body text-sm text-maroon-800 mt-1" id="summary-gifts">Gifts: —</p>
+          </div>
+
+          <p class="text-maroon-700/70 text-xs sm:text-sm mt-6 font-body">
+            Happy Raksha Bandhan — sealed with a thread, sent with a hug.
+          </p>
+
+          <button class="btn-shimmer mt-7 bg-maroon-800 hover:bg-maroon-700 text-cream font-body font-medium tracking-wide px-8 py-3 rounded-full shadow-lg transition-colors" onclick="restartCard()">
+            Send Another
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- External script -->
+  <script src="script.js"></script>
+</body>
+</html>

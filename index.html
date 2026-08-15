@@ -5,14 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Happy Raksha Bandhan</title>
 
-<!-- ============================================================
-     FONTS
-     - Marcellus: an inscribed, temple-plaque serif used ONLY for
-       the big ceremonial title (restraint = impact).
-     - Cormorant Garamond (italic): the "editorial" voice used for
-       the poem, so the final message reads like handwriting on a card.
-     - Poppins: quiet, neutral UI voice for buttons/labels/body.
-     ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
@@ -49,16 +41,16 @@
   };
 </script>
 
-<!-- External stylesheet -->
+
 <link rel="stylesheet" href="style.css" />
 </head>
 
 <body class="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 relative overflow-x-hidden">
 
-  <!-- Floating gold dust + marigold petals, populated by JS -->
+  
   <div id="particle-field" aria-hidden="true"></div>
 
-  <!-- faint mandala watermark -->
+  
   <svg aria-hidden="true" class="fixed inset-0 w-full h-full opacity-[0.06] pointer-events-none" viewBox="0 0 400 400">
     <g fill="none" stroke="#FFD700" stroke-width="1">
       <circle cx="200" cy="200" r="180"/>
@@ -69,12 +61,10 @@
     </g>
   </svg>
 
-  <!-- ============================================================
-       MAIN WIZARD CARD
-       ============================================================ -->
+  
   <main class="relative z-10 w-full max-w-xl bg-cream/95 backdrop-blur rounded-3xl shadow-2xl ring-1 ring-gold/30 overflow-hidden">
 
-    <!-- Thread progress header (signature element) -->
+
     <div class="px-6 sm:px-10 pt-6 pb-4">
       <div class="flex items-center justify-between mb-2">
         <div class="thread-knot active" data-knot="1"><span class="dot"></span></div>
@@ -90,7 +80,7 @@
 
     <div class="px-6 sm:px-10 pb-8 sm:pb-10 min-h-[420px]" id="step-container">
 
-      <!-- ============================ STEP 1: WELCOME ============================ -->
+      
       <section class="step active" data-step="1">
         <div class="envelope-scene py-4">
           <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open your Raksha Bandhan card" onclick="openEnvelope()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEnvelope();}">
@@ -119,13 +109,13 @@
         </div>
       </section>
 
-      <!-- ============================ STEP 2: RAKHI SELECTION ============================ -->
+      
       <section class="step" data-step="2">
         <h2 class="font-display text-2xl sm:text-3xl text-maroon-800 text-center mb-1">Choose Your Rakhi</h2>
         <p class="text-center text-maroon-700/70 text-xs sm:text-sm mb-6 font-body">Pick the one that feels right — only one thread makes it to the wrist.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- Classic Thread Rakhi -->
+          
           <button type="button" class="rakhi-card text-left bg-white rounded-2xl p-5 relative" onclick="selectRakhi(this,'Classic Thread Rakhi')">
             <div class="check-badge absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center" style="background:#FFD700;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
@@ -141,7 +131,7 @@
             <p class="text-center text-maroon-700/60 text-xs mt-1 font-body">Simple, sweet, timeless</p>
           </button>
 
-          <!-- Premium Zardosi Rakhi -->
+        
           <button type="button" class="rakhi-card text-left bg-white rounded-2xl p-5 relative" onclick="selectRakhi(this,'Premium Zardosi Rakhi')">
             <div class="check-badge absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center" style="background:#FFD700;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A0A14" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
@@ -171,10 +161,10 @@
         </div>
       </section>
 
-      <!-- ============================ STEP 3: GIFT SELECTION ============================ -->
+      
       <section class="step" data-step="3">
         <h2 class="font-display text-2xl sm:text-3xl text-maroon-800 text-center mb-1">Pick a Gift</h2>
-        <p class="text-center text-maroon-700/70 text-xs sm:text-sm mb-6 font-body">You can choose anyone.</p>
+        <p class="text-center text-maroon-700/70 text-xs sm:text-sm mb-6 font-body">Choose the one that suits the occasion best.</p>
 
         <div class="space-y-3">
           <button type="button" class="gift-card w-full flex items-center gap-4 bg-white rounded-xl p-4" onclick="toggleGift(this,'Cash Shagun')">
@@ -221,7 +211,7 @@
         </div>
       </section>
 
-      <!-- ============================ STEP 4: THANK YOU ============================ -->
+      
       <section class="step" data-step="4">
         <div class="text-center py-2">
           <svg width="120" height="90" viewBox="0 0 120 90" class="mx-auto" aria-hidden="true">
@@ -261,8 +251,10 @@
           <div class="mt-6 bg-white/70 rounded-2xl px-5 py-4 max-w-sm mx-auto text-left" id="summary-box">
             <p class="text-[11px] tracking-[0.15em] uppercase text-maroon-700/60 font-body mb-2">On its way to you</p>
             <p class="font-body text-sm text-maroon-800" id="summary-rakhi">Rakhi: —</p>
-            <p class="font-body text-sm text-maroon-800 mt-1" id="summary-gifts">Gifts: —</p>
+            <p class="font-body text-sm text-maroon-800 mt-1" id="summary-gifts">Gift: —</p>
           </div>
+
+          <p class="text-maroon-700/50 text-[11px] mt-3 font-body" id="send-status"></p>
 
           <p class="text-maroon-700/70 text-xs sm:text-sm mt-6 font-body">
             Happy Raksha Bandhan — sealed with a thread, sent with a hug.
@@ -277,7 +269,7 @@
     </div>
   </main>
 
-  <!-- External script -->
+  
   <script src="script.js"></script>
 </body>
 </html>
